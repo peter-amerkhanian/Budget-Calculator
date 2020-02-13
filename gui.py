@@ -16,10 +16,10 @@ def create_message(text: str) -> str:
             reason: str
             initials, reason= tuple(initials_reason_data)
             reason = reason if reason else "unknown"
-            if initials.strip() == "P":
+            if initials.strip().upper() == "P":
                 payer: str = "Peter"
                 peter += price
-            elif initials.strip() == "A":
+            elif initials.strip().upper() == "A":
                 payer: str = "Arielle"
                 arielle += price
             else:
@@ -37,6 +37,8 @@ def create_message(text: str) -> str:
         difference: float = peter / 2 - arielle / 2
         message: str = f"Peter paid ${peter}\nArielle paid ${arielle}\n" \
                        f"And so...\nArielle owes Peter ${round(difference, 2)}"
+    else:
+        message: str = 'An error occurred :(\nMake sure all entries are in the correct form\ni.e. "P 10 lunch"'
     return message
 
 def clicked():
