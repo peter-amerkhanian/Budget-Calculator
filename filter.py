@@ -1,9 +1,10 @@
 import re
 from typing import List
+from collections import OrderedDict
 
 with open("text.txt") as f:
     transactions_raw: List[str] = f.read().split("\n")
-    transactions_clean: List[dict] = []
+    transactions_clean: List[OrderedDict] = []
     peter: int = 0
     arielle: int = 0
     for transaction in transactions_raw:
@@ -11,14 +12,26 @@ with open("text.txt") as f:
         _other: List[str] = [_.strip() for _ in re.split('[.0-9]+', transaction)]
         initials, reason= tuple(_other) # initials: str, reason: str
         reason = reason if reason else "unknown"
-        payer: str = "Peter" if initials.strip() == "P" else "Arielle"
-        if payer == "Peter":
+        if initials.strip() == "P":
+            payer: str = "Peter"
             peter += price
-        elif payer == "Arielle":
+        elif initials.strip() == "A":
+            payer: str = "Arielle"
             arielle += price
         else:
+            payer: str = "unknown"
             print("Unknown error.")
-        print(f"{payer}: {price} for {reason}")
-    print(f"Peter paid {peter}")
-    print(f"Arielle paid {arielle}")
+        transaction_dict: OrderedDict = OrderedDict({"payer": payer,
+                                                     "price": price,
+                                                     "reason": reason})
+        transactions_clean.append((transaction_dict))
+    print(f"Peter paid ${peter}")
+    print(f"Arielle paid ${arielle}")
+    print("And so...")
+    if arielle > peter:
+        difference: float = arielle/2 - peter/2
+        print(f"Peter owes Arielle ${round(difference, 2)}")
+    elif peter > arielle:
+        difference: float = peter / 2 - arielle / 2
+        print(f"Arielle owes Peter ${round(difference, 2)}")
 
