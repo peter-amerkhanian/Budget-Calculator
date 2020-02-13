@@ -2,15 +2,18 @@ import re
 from typing import List
 from collections import OrderedDict
 
+
 with open("text.txt") as f:
     transactions_raw: List[str] = f.read().split("\n")
     transactions_clean: List[OrderedDict] = []
     peter: int = 0
     arielle: int = 0
-    for transaction in transactions_raw:
+    for transaction in transactions_raw: #transaction: str
         price: float = float(re.search('[.0-9]+', transaction).group())
-        _other: List[str] = [_.strip() for _ in re.split('[.0-9]+', transaction)]
-        initials, reason= tuple(_other) # initials: str, reason: str
+        initials_reason_data: List[str] = [_.strip() for _ in re.split('[.0-9]+', transaction)]
+        initials: str
+        reason: str
+        initials, reason= tuple(initials_reason_data)
         reason = reason if reason else "unknown"
         if initials.strip() == "P":
             payer: str = "Peter"
